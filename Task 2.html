@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            height: auto;
+            width: auto;
+            margin-top: 50px;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        font-size: 20px;
+        background: gray;
+}
+
+.stopwatch {
+    margin-top: 50px;
+}
+
+button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 15px;
+    background-color:rgba(240, 8, 8, 0.486);
+    color: white;
+}
+    </style>
+</head>
+<body>
+    <div class="stopwatch">
+        <h1>Stopwatch</h1>
+        <p id="display">00:00:00:00</p>
+        <button onclick="startStop()">Start/Stop</button>
+        <button onclick="reset()">Reset</button>
+        <button onclick="recordLap()">Lap</button>
+        <ul id="laps"></ul>
+    </div>
+    <script>let timer;
+let isRunning = false;
+let minisecond = 0, seconds = 0, minutes = 0, hours = 0;
+
+function updateDisplay() {
+    document.getElementById("display").innerText =
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(minisecond).padStart(2, '0')}`;
+}
+
+function startStop() {
+    if (isRunning) {
+        clearInterval(timer);
+    } else {
+        timer = setInterval(() => {
+            minisecond++;
+            if (minisecond === 50) {
+                minisecond = 0;
+                seconds++;
+                if (seconds === 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes === 60){
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+            }
+            updateDisplay();
+        }, 20);
+    }
+    isRunning = !isRunning;
+}
+
+function reset() {
+    clearInterval(timer);
+    isRunning = false;
+    minisecond = seconds = minutes = hours = 0;
+    updateDisplay();
+    document.getElementById("laps").innerHTML = "";
+}
+
+function recordLap() {
+    const lapTime = document.getElementById("display").innerText;
+    const lapItem = document.createElement("li");
+    lapItem.innerText = lapTime;
+    document.getElementById("laps").appendChild(lapItem);
+}
+
+updateDisplay();</script>
+</body>
+</html>
